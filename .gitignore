@@ -1,27 +1,37 @@
-# Python bytecode
-__pycache__/
-*.py[cod]
-*$py.class
-
 # Virtual Environment
+.venv/
 venv/
 env/
-.venv/
 
-# Environment Variables
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables
 .env
 
-# Project Data (Avoid checking in large PDFs or local databases)
-
-
-data/chroma_db/
-data/archive_memory/
-
-# Generated Output
-newsletter_*.html
-
-# IDE/System Files
+# VS Code
 .vscode/
-.idea/
+
+# Mac files
 .DS_Store
-Thumbs.db
+
+# Logs
+*.log
+
+# Uploaded documents
+uploaded_docs/
+
+# Vector DB files
+faiss_index/
+*.faiss
+*.pkl
+
+# Node modules
+node_modules/
+
+# Build files
+dist/
+build/
