@@ -26,7 +26,7 @@ export default function HistoryPage() {
         const token = (session as any)?.accessToken;
         if (!token) return;
         
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/history`, {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || "https://lawgpt-e16g.onrender.com"}/history`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setHistory(res.data);

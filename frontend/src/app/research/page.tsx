@@ -37,7 +37,7 @@ export default function ResearchPage() {
 
     try {
       const token = (session as any)?.accessToken;
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/query`, 
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || "https://lawgpt-e16g.onrender.com"}/query`, 
         { query: userMessage.text },
         { headers: { Authorization: `Bearer ${token}` } }
       );
