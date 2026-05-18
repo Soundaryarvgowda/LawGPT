@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: lawgpt-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: examplepassword
+
+  backend:
+    build: ./backend
+    container_name: lawgpt-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URI=mongodb://root:examplepassword@mongodb:27017/
+      - SECRET_KEY=lawgpt_super_secret_key
+      - OLLAMA_HOST=http://host.docker.internal:11434
+    depends_on:
+      - mongodb
+    volumes:
+      - ./backend:/app
+      - ./backend/data:/app/data
+      - ./backend/vector_store:/app/vector_store
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  frontend:
+    build: ./frontend
+    container_name: lawgpt-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+
+volumes:
+  mongodb_data:
