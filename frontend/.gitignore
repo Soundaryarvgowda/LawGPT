@@ -45,3 +45,9 @@ backend/venv/
 __pycache__/
 *.pyc
 .DS_Store
+venv/
+node_modules/
+vector_store/
+.env
+__pycache__/
+.next/
