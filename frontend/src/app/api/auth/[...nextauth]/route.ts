@@ -34,8 +34,8 @@ const handler = NextAuth({
       try {
         return jwt.verify(token, secret, {
           algorithms: ["HS256"],
-        });
-      } catch (error) {
+        }) as any;
+      } catch {
         return null;
       }
     },
@@ -59,7 +59,7 @@ const handler = NextAuth({
         session.user.email = token.email as string;
         session.user.image = token.picture as string;
       }
-      
+
       // Pass token to client side for API calls
       (session as any).accessToken = jwt.sign(token, process.env.NEXTAUTH_SECRET || "lawgpt_super_secret_key", { algorithm: "HS256" });
 
