@@ -4,8 +4,9 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@/lib/mongodb";
 import jwt from "jsonwebtoken";
 
-export const authOptions = {
+const handler = NextAuth({
   adapter: MongoDBAdapter(clientPromise),
+
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
@@ -13,48 +14,60 @@ export const authOptions = {
       allowDangerousEmailAccountLinking: true,
     }),
   ],
+
   session: {
-    strategy: "jwt" as const,
+    strategy: "jwt",
   },
+
   jwt: {
-    encode: ({ secret, token }: any) => {
-      // Use HS256 to be easily verifiable by FastAPI
-      return jwt.sign(token, secret, { algorithm: "HS256" });
+    encode: async ({ secret, token }) => {
+      if (!token) return "";
+
+      return jwt.sign(token, secret, {
+        algorithm: "HS256",
+      });
     },
-    decode: async ({ secret, token }: any) => {
+
+    decode: async ({ secret, token }) => {
       if (!token) return null;
+
       try {
-        const verify = jwt.verify(token, secret, { algorithms: ["HS256"] });
-        return verify as any;
+        return jwt.verify(token, secret, {
+          algorithms: ["HS256"],
+        });
       } catch (error) {
         return null;
       }
     },
   },
+
   callbacks: {
-    async jwt({ token, user, account }: any) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
         token.picture = user.image;
       }
+
       return token;
     },
-    async session({ session, token }: any) {
+
+    async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id;
-        session.user.email = token.email;
-        session.user.image = token.picture;
+        session.user.id = token.id as string;
+        session.user.email = token.email as string;
+        session.user.image = token.picture as string;
       }
+      
       // Pass token to client side for API calls
-      session.accessToken = jwt.sign(token, process.env.NEXTAUTH_SECRET || "lawgpt_super_secret_key", { algorithm: "HS256" });
+      (session as any).accessToken = jwt.sign(token, process.env.NEXTAUTH_SECRET || "lawgpt_super_secret_key", { algorithm: "HS256" });
+
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET || "lawgpt_super_secret_key",
-};
 
-const handler = NextAuth(authOptions);
+  secret: process.env.NEXTAUTH_SECRET,
+});
 
 export { handler as GET, handler as POST };
