@@ -54,16 +54,22 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.email = token.email as string;
-        session.user.image = token.picture as string;
-      }
-
-      // Pass token to client side for API calls
-      (session as any).accessToken = jwt.sign(token, process.env.NEXTAUTH_SECRET || "lawgpt_super_secret_key", { algorithm: "HS256" });
-
-      return session;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id as string,
+          email: token.email as string,
+          image: token.picture as string,
+        },
+        accessToken: jwt.sign(
+          token,
+          process.env.NEXTAUTH_SECRET || "lawgpt_super_secret_key",
+          {
+            algorithm: "HS256",
+          }
+        ),
+      };
     },
   },
 
