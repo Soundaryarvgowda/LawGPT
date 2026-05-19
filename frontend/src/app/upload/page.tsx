@@ -50,7 +50,7 @@ export default function UploadPage() {
 
     try {
       const token = (session as any)?.accessToken;
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/upload-pdf`, formData, {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL || ""}/upload-pdf`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`
