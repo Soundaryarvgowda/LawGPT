@@ -92,6 +92,17 @@ async def summarize(request: SummarizeRequest, current_user: dict = Depends(get_
     summary = summarize_document(request.document_id)
     return {"summary": summary}
 
+@app.get("/debug")
+async def debug_info():
+    import os
+    return {
+        "has_openai_key": bool(os.getenv("OPENAI_API_KEY")),
+        "openai_key_preview": os.getenv("OPENAI_API_KEY")[:12] + "..." if os.getenv("OPENAI_API_KEY") else None,
+        "has_nextauth_secret": bool(os.getenv("NEXTAUTH_SECRET")),
+        "nextauth_secret_value": os.getenv("NEXTAUTH_SECRET"),
+        "mongodb_uri_preview": os.getenv("MONGODB_URI")[:35] + "..." if os.getenv("MONGODB_URI") else None,
+    }
+
 @app.get("/health")
 async def health_check(db = Depends(get_db)):
     try:
