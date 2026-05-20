@@ -3,22 +3,18 @@ import shutil
 from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import OllamaEmbeddings
-from langchain_community.llms import Ollama
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 
-OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
-
-embeddings = OllamaEmbeddings(
-    model="nomic-embed-text",
-    base_url=OLLAMA_HOST
+embeddings = OpenAIEmbeddings(
+    model="text-embedding-3-small"
 )
 
-llm = Ollama(
-    model="llama3",
-    base_url=OLLAMA_HOST
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0.2
 )
 
 DATA_PATH = "data/pdfs"
