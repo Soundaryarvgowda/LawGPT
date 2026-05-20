@@ -19,11 +19,12 @@ embeddings = OpenAIEmbeddings(
     api_key=os.getenv("OPENAI_API_KEY")
 )
 
-llm = ChatGroq(
-    model="llama3-8b-8192",
-    temperature=0.2,
-    groq_api_key=os.getenv("GROQ_API_KEY")
-)
+def get_llm():
+    return ChatGroq(
+        model="llama3-8b-8192",
+        temperature=0.2,
+        groq_api_key=os.getenv("GROQ_API_KEY")
+    )
 
 def ingest_pdfs():
     try:
@@ -115,7 +116,7 @@ def query_rag(query: str):
                 "question": RunnablePassthrough()
             }
             | prompt
-            | llm
+            | get_llm()
             | StrOutputParser()
         )
 
@@ -174,7 +175,7 @@ def summarize_document(filename: str):
 
         prompt = PromptTemplate.from_template(template)
 
-        chain = prompt | llm | StrOutputParser()
+        chain = prompt | get_llm() | StrOutputParser()
 
         return chain.invoke({"context": context_text})
 
