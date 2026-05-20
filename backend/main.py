@@ -15,7 +15,12 @@ app = FastAPI(title="LawGPT API")
 # Setup CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, restrict this
+    allow_origins=[
+        "http://localhost:3000",
+        "https://law-gpt-rouge.vercel.app",
+        "https://law-gpt-git-samrud141-samruds-projects.vercel.app",
+        "https://law-cj4gtgemt-samruds-projects.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
