@@ -4,6 +4,7 @@ langchain-core==0.2.3
 langchain-text-splitters==0.2.1
 langchain-groq==0.1.5
 langsmith==0.1.147
+langchain-openai==0.1.8
 
 groq==0.37.1
 openai==2.37.0
