@@ -96,8 +96,8 @@ async def summarize(request: SummarizeRequest, current_user: dict = Depends(get_
 async def debug_info():
     import os
     return {
-        "has_openai_key": bool(os.getenv("OPENAI_API_KEY")),
-        "openai_key_preview": os.getenv("OPENAI_API_KEY")[:12] + "..." if os.getenv("OPENAI_API_KEY") else None,
+        "has_google_key": bool(os.getenv("GOOGLE_API_KEY")),
+        "google_key_preview": os.getenv("GOOGLE_API_KEY")[:12] + "..." if os.getenv("GOOGLE_API_KEY") else None,
         "has_nextauth_secret": bool(os.getenv("NEXTAUTH_SECRET")),
         "nextauth_secret_value": os.getenv("NEXTAUTH_SECRET"),
         "mongodb_uri_preview": os.getenv("MONGODB_URI")[:35] + "..." if os.getenv("MONGODB_URI") else None,
