@@ -2,7 +2,8 @@ import os
 from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_openai import OpenAIEmbeddings
+from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
@@ -18,10 +19,10 @@ embeddings = OpenAIEmbeddings(
     api_key=os.getenv("OPENAI_API_KEY")
 )
 
-llm = ChatOpenAI(
-    model="gpt-4o-mini",
+llm = ChatGroq(
+    model="llama3-8b-8192",
     temperature=0.2,
-    api_key=os.getenv("OPENAI_API_KEY")
+    groq_api_key=os.getenv("GROQ_API_KEY")
 )
 
 def ingest_pdfs():
